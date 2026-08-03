@@ -3,7 +3,7 @@ services:
     image: indifferentbroccoli/satisfactory-server-docker
     restart: unless-stopped
     container_name: satisfactory
-    stop_grace_period: 30s
+    stop_grace_period: 120s
     ports:
       - 7777:7777/udp
       - 7777:7777/tcp
@@ -15,8 +15,8 @@ services:
     env_file:
       - stack.env
     volumes:
-      - ./satisfactory/server-files:/satisfactory
-      - ./satisfactory/server-data:/home/steam/.config/Epic/FactoryGame/Saved/SaveGames
+      - server-files:/satisfactory
+      - server-data:/home/steam/.config/Epic/FactoryGame/Saved/SaveGames
 
   sf-status:
       build: .
@@ -37,4 +37,10 @@ services:
         - no-new-privileges:true
 
 volumes:
+  server-files:
+    name: satisfactory-server-files
+    external: true
+  server-data:
+    name: satisfactory-server-data
+    external: true
   sf-status-state:
