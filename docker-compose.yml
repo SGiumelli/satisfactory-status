@@ -1,0 +1,45 @@
+services:
+  satisfactory:
+    image: indifferentbroccoli/satisfactory-server-docker
+    restart: unless-stopped
+    container_name: satisfactory
+    stop_grace_period: 30s
+    ports:
+      - 7777:7777/udp
+      - 7777:7777/tcp
+      - 7778:7778/tcp
+    environment:
+      PUID: 1000
+      PGID: 1000
+      GENERATE_SETTINGS: true
+    env_file:
+      - stack.env
+    volumes:
+      - ./satisfactory/server-files:/satisfactory
+      - ./satisfactory/server-data:/home/steam/.config/Epic/FactoryGame/Saved/SaveGames
+
+  sf-status:
+    image: alpine:3.22
+    container_name: sf-status
+    restart: unless-stopped
+    environment:
+      SF_HOST: ${SF_HOST:-satisfactory}
+      SF_PORT: "7777"
+      SF_TOKEN: ${SF_TOKEN}
+      DISCORD_WEBHOOK: ${DISCORD_WEBHOOK}
+      INTERVAL: ${INTERVAL:-300}
+    volumes:
+      - ./status.sh:/opt/status.sh:ro
+      - sf-status-state:/state
+    security_opt:
+      - no-new-privileges:true
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        apk add --no-cache bash curl jq >/dev/null
+        while :; do
+          bash /opt/status.sh || echo "échec du cycle"
+          sleep "$${INTERVAL}"
+        done
+    networks:
+      - satisfactory_default
