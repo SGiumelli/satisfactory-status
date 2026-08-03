@@ -11,7 +11,7 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
-      GENERATE_SETTINGS: true
+      GENERATE_SETTINGS: "true"
     env_file:
       - stack.env
     volumes:
@@ -22,8 +22,10 @@ services:
     image: alpine:3.22
     container_name: sf-status
     restart: unless-stopped
+    depends_on:
+      - satisfactory
     environment:
-      SF_HOST: ${SF_HOST:-satisfactory}
+      SF_HOST: satisfactory
       SF_PORT: "7777"
       SF_TOKEN: ${SF_TOKEN}
       DISCORD_WEBHOOK: ${DISCORD_WEBHOOK}
@@ -41,5 +43,6 @@ services:
           bash /opt/status.sh || echo "échec du cycle"
           sleep "$${INTERVAL}"
         done
-    networks:
-      - satisfactory_default
+
+volumes:
+  sf-status-state:
