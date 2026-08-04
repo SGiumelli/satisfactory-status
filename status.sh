@@ -8,7 +8,7 @@ WEBHOOK="${DISCORD_WEBHOOK:?DISCORD_WEBHOOK manquant}"
 ID_FILE="/state/msg_id"
 
 query() {
-  curl -sk --max-time 10 -X POST "http://$SF_HOST:$SF_PORT/api/v1" \
+  curl -sk --max-time 10 -X POST "https://$SF_HOST:$SF_PORT/api/v1" \
     -H "Authorization: Bearer $SF_TOKEN" \
     -H 'Content-Type: application/json' \
     -d '{"function":"QueryServerState","data":{}}'
