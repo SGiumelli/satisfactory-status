@@ -1,0 +1,19 @@
+{
+  "name": "satisfactory-bot",
+  "version": "1.0.0",
+  "description": "Bot Discord de statut et de sauvegarde pour un serveur dédié Satisfactory",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.28.1",
+    "dockerode": "^5.0.1"
+  }
+}
